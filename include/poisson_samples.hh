@@ -3,10 +3,14 @@
 
 #include <cstdio>
 #include <cmath>
+#include <cstring>
 
 #include "utils.hh"
 
 namespace Seeds {
+
+
+// ! point in matrix
 struct Point{
 
     int x;
@@ -19,9 +23,12 @@ struct Point{
 
 };
 
+// ! poisson-disk samples implement
 class PoissonSample {
   private:
     
+    constexpr static const float pi_ = 3.14158f;
+
     int row_;
 
     int column_;
@@ -74,12 +81,16 @@ class PoissonSample {
 
     ~PoissonSample();
 
+    // ! generate k seeds
     void GenerateSamples();
 
+    // ! get the array of k seeds
     Point *GetResult();
 
+    // ! print result in values
     void PrintNumberResult();
 
+    // ! print result in graph
     void PrintGraphResult();
 
 };

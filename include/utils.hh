@@ -6,6 +6,8 @@
 
 namespace Utils {
 
+
+// ! mySTL std::queue<>
 template<class T>
 class Queue {
   private :
@@ -68,7 +70,7 @@ class Queue {
     }
 };
 
-
+// ! generate random int 
 class RandomGenerator {
   public:
 

@@ -4,9 +4,10 @@ using namespace Seeds;
 
 PoissonSample::PoissonSample(int n, int m, int k, int round): row_(n), column_(m), kpoints_(k), round_count_(round) { 
     result_ = new Point[k];
-    radius_ = sqrt(1.0f*n*m/k);
+    memset(result_, 0, sizeof(Point) * k);
+    radius_ = sqrt(1.7f*n*m/k/pi_);
     vis_ = new bool[n*m]{false};
-    printf("%f\n", radius_);
+    //printf("%f\n", radius_);
 }
 
 PoissonSample::~PoissonSample() {
@@ -52,8 +53,8 @@ Point PoissonSample::RandomRound(Point p) {
         int temp = rg.RangeInt(0, static_cast<int>(radius_));
         float dis = radius_ + radius_ * radius_ / (radius_ + temp);
 
-        int t1 = rg.RangeInt(0, static_cast<int>(radius_)), t2 = rg.RangeInt(0, static_cast<int>(radius_));
-        float angle = 2.0 * t1 / (t1 + t2) * 3.14159f;
+        int t1 = rg.RangeInt(1, static_cast<int>(radius_)), t2 = rg.RangeInt(1, static_cast<int>(radius_));
+        float angle = 2.0 * t1 / (t1 + t2) * pi_;
     
         nx = static_cast<int>(p.x+dis*cos(angle));
         ny = static_cast<int>(p.y+dis*sin(angle));
