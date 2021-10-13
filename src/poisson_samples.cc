@@ -5,9 +5,9 @@ using namespace Seeds;
 PoissonSample::PoissonSample(int n, int m, int k, int round): row_(n), column_(m), kpoints_(k), round_count_(round) { 
     result_ = new Point[k];
     memset(result_, 0, sizeof(Point) * k);
-    radius_ = sqrt(1.7f*n*m/k/pi_);
+    dist_ = sqrt(n*m/k)*0.8;
     vis_ = new bool[n*m]{false};
-    //printf("%f\n", radius_);
+    //printf("%f\n", dist_);
 }
 
 PoissonSample::~PoissonSample() {
@@ -50,12 +50,8 @@ float PoissonSample::GetDist(int nx, int ny, Point p) {
 Point PoissonSample::RandomRound(Point p) {
     int nx{}, ny{};
     do {
-        int temp = rg.RangeInt(0, static_cast<int>(radius_));
-        float dis = radius_ + radius_ * radius_ / (radius_ + temp);
-
-        int t1 = rg.RangeInt(1, static_cast<int>(radius_)), t2 = rg.RangeInt(1, static_cast<int>(radius_));
-        float angle = 2.0 * t1 / (t1 + t2) * pi_;
-    
+        float dis = rng.uniform(dist_, dist_*2.0f);
+        float angle = rng.uniform(0.0f, 2.0f*pi_);
         nx = static_cast<int>(p.x+dis*cos(angle));
         ny = static_cast<int>(p.y+dis*sin(angle));
     } while(!InMat(nx, ny));
@@ -63,13 +59,13 @@ Point PoissonSample::RandomRound(Point p) {
 }
 
 bool PoissonSample::CheckNeighbor(Point p) {
-    int up = p.x - radius_ >= 0 ? p.x - radius_ : 0;
-    int down = p.x + radius_ < row_ ? p.x + radius_ : row_;
-    int left = p.y - radius_ >= 0 ? p.y - radius_ : 0;
-    int right = p.y + radius_ < column_ ? p.y + radius_ : column_;
+    int up = p.x - dist_ >= 0 ? p.x - dist_ : 0;
+    int down = p.x + dist_ < row_ ? p.x + dist_ : row_;
+    int left = p.y - dist_ >= 0 ? p.y - dist_ : 0;
+    int right = p.y + dist_ < column_ ? p.y + dist_ : column_;
     for(int i = up; i <= down; i++) {
         for(int j = left; j <= right; j++) {
-            if(GetDist(i, j, p) < radius_ && vis_[GetPos(i, j)]) {
+            if(GetDist(i, j, p) < dist_ && vis_[GetPos(i, j)]) {
                 return false;
             }
         }
@@ -79,12 +75,12 @@ bool PoissonSample::CheckNeighbor(Point p) {
 
 void PoissonSample::GenerateSamples() {
     Utils::Queue<Point> process_list(row_*column_);
-    Point first(rg.RangeInt(0, row_), rg.RangeInt(0, column_));
+    Point first(rng.uniform(0, row_), rng.uniform(0, column_));
     process_list.push(first);
     PushResult(first);
     PushVis(first);
     while(!process_list.empty() && cnt_result_ < kpoints_) {
-        int idx = rg.RangeInt(0, process_list.len());
+        int idx = rng.uniform(0, process_list.len());
         Point pcur = process_list.at(idx);
         process_list.erase(idx);
         for(int i = 0; i < round_count_; i++) {

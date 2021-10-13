@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
+#include <opencv2/imgproc.hpp>
 
 #include "utils.hh"
 
@@ -39,13 +40,13 @@ class PoissonSample {
 
     int cnt_result_{};
 
-    float radius_;
+    float dist_;
 
     int round_count_;
 
     bool *vis_;
 
-    Utils::RandomGenerator rg;
+    cv::RNG rng;
 
     int GetRow(int pos) {
         if(!row_) return -1;
