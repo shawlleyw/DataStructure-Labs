@@ -1,21 +1,26 @@
 #include "watershed.hh"
 #include <cstdlib>
+#include <chrono>
 
 using namespace IMAGE;
 
-ImageProcessor::ImageProcessor(const char *filename, int kseeds) : kseeds_(kseeds), rng_(-1) {
+ImageProcessor::ImageProcessor(const char *filename, int kseeds) : kseeds_(kseeds) {
     image_ = cv::imread(filename);
     seeds_ = new Seeds::Point[kseeds];
-    //printf ("row: %d  col: %d\n", image_.rows, image_.cols);
-    Seeds::PoissonSample samples(image_.cols, image_.rows, kseeds);
+    printf ("row: %d  col: %d\n", image_.rows, image_.cols);
     
+    Seeds::PoissonSample samples(image_.cols, image_.rows, kseeds);
+    auto st = std::chrono::steady_clock::now();
     samples.GenerateSamples();
+    auto ed = std::chrono::steady_clock::now();
+    auto cost = std::chrono::duration_cast<std::chrono::duration<double>> (ed-st);
     samples.PrintNumberResult();
-    memcpy(seeds_, samples.GetResult(), sizeof(Seeds::Point) * kseeds);
+    printf("%.6lfs\n", cost.count());
 
+    memcpy(seeds_, samples.GetResult(), 1ll * sizeof(Seeds::Point) * kseeds);
     seeds_image_ = image_.clone();
-    for(int i = 0; i < kseeds_; i++) {
-        circle(seeds_image_, cv::Point(seeds_[i].x, seeds_[i].y), 3, cv::Scalar::all(255), -1);
+    for(int i = 0; i < kseeds; i++) {
+        cv::circle(seeds_image_, cv::Point(seeds_[i].x, seeds_[i].y), 3, cv::Scalar::all(255), -1);
     }
 }
 
@@ -30,15 +35,17 @@ void ImageProcessor::DisplayResultImage(const char *image_name) {
 
 void ImageProcessor::DisplaySeedsOnImage(const char *image_name) {
     cv::Mat output_image = seeds_image_.clone();
-    char * location = new char[100];
+    
+    char *location = new char[100];
     for(int i = 0; i < kseeds_; i++) {
-        sprintf(location, "%d,%d", seeds_[i].x, seeds_[i].y);
+        sprintf(location, "%d", i);
         putText(output_image, location, cv::Point(seeds_[i].x, seeds_[i].y), 6, 0.3, cv::Scalar(255, 0, 0));
     }
     DisplayImage(output_image, image_name);
+    
     delete [] location;
+    
 }
-
 void ImageProcessor::InitMarkers() {
 
     cv::Mat marker_mask(image_.size(), 8, 1);

@@ -78,7 +78,7 @@ class PoissonSample {
 
   public:
 
-    explicit PoissonSample(int n, int m, int k, int round = 30);
+    explicit PoissonSample(int n, int m, int k, int round = 100);
 
     ~PoissonSample();
 
