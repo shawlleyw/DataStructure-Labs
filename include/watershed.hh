@@ -30,30 +30,33 @@ class ImageProcessor {
 
     Seeds::Point *seeds_;
 
-     cv::RNG rng_;
+    cv::RNG rng_;
 
     void DisplayImage(const cv::Mat &image, const char *image_name);
     
     void InitMarkers();
 
+    void ProcessOutput();
+
   public:
     
-    ImageProcessor(const char *filename, int kseeds);
+    explicit ImageProcessor(const char *filename, int kseeds);
 
     ~ImageProcessor() = default;
-
-    void DisplayResultImage(const char *image_name);
-
-    void DisplaySeedsOnImage(const char *image_name);
 
     void DoWaterShed();
 
     void PerformWaterShed();
 
-    void ProcessOutput();
+    void DisplayResultImage(const char *image_name);
 
-    void PrintResultOutput();
+    void DisplaySeedsOnImage(const char *image_name);
 
+    void DisplayResultOutput();
+
+    const cv::Mat &markers() const { 
+        return markers_;
+    }
 };
 
 };

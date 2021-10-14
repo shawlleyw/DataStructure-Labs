@@ -34,20 +34,20 @@ void PoissonSample::PrintGraphResult() {
     }
 }
 
-void PoissonSample::PushResult(Point p) {
+void PoissonSample::PushResult(const Point &p) {
     result_[cnt_result_++] = p;
 }
 
-void PoissonSample::PushVis(Point p) {
+void PoissonSample::PushVis(const Point &p) {
     vis_[GetPos(p.x, p.y)] = true;
 }
 
-float PoissonSample::GetDist(int nx, int ny, Point p) {
+float PoissonSample::GetDist(const int &nx, const int &ny, const Point &p) {
     int sqr_dist = (nx-p.x) * (nx-p.x) + (ny-p.y) * (ny-p.y);
     return sqrt(1.0f*sqr_dist);
 }
 
-Point PoissonSample::RandomRound(Point p) {
+Point PoissonSample::RandomRound(const Point &p) {
     int nx{}, ny{};
     do {
         float dis = rng.uniform(dist_, dist_*2.0f);
@@ -58,7 +58,7 @@ Point PoissonSample::RandomRound(Point p) {
     return Point(nx, ny);
 }
 
-bool PoissonSample::CheckNeighbor(Point p) {
+bool PoissonSample::CheckNeighbor(const Point &p) {
     int up = p.x - dist_ >= 0 ? p.x - dist_ : 0;
     int down = p.x + dist_ < row_ ? p.x + dist_ : row_;
     int left = p.y - dist_ >= 0 ? p.y - dist_ : 0;
@@ -74,7 +74,7 @@ bool PoissonSample::CheckNeighbor(Point p) {
 }
 
 void PoissonSample::GenerateSamples() {
-    Utils::Queue<Point> process_list(row_*column_);
+    Utils::mySTL::Queue<Point> process_list(row_*column_);
     Point first(rng.uniform(0, row_), rng.uniform(0, column_));
     process_list.push(first);
     PushResult(first);

@@ -69,14 +69,6 @@ void ImageProcessor::InitMarkers() {
     DisplayImage(markers_output, "markers");
 }
 
-void ImageProcessor::PerformWaterShed() {
-    InitMarkers();
-    cv::watershed(image_, markers_);
-    cv::Mat watershed_output;
-	cv::convertScaleAbs(markers_, watershed_output);
-	DisplayImage(watershed_output, "Watershed");
-}
-
 void ImageProcessor::ProcessOutput() {
     output_.create(image_.size(), CV_8UC3);
 
@@ -87,7 +79,8 @@ void ImageProcessor::ProcessOutput() {
         ptr[1] = static_cast<uchar>(rng_.uniform(50, 200));
         ptr[2] = static_cast<uchar>(rng_.uniform(50, 200));
     }
-   for(int i = 0; i < markers_.rows; i++ ) {
+
+    for(int i = 0; i < markers_.rows; i++ ) {
         for(int j = 0; j < markers_.cols; j++ ) {
             int index = markers_.at<int>(i, j);
             if(index == -1) {
@@ -104,6 +97,15 @@ void ImageProcessor::ProcessOutput() {
    cv::addWeighted(output_, 0.5f, image_, 0.5f, 0, output_);
 }
 
-void ImageProcessor::PrintResultOutput() {
+void ImageProcessor::PerformWaterShed() {
+    InitMarkers();
+    cv::watershed(image_, markers_);
+    cv::Mat watershed_output;
+	cv::convertScaleAbs(markers_, watershed_output);
+	DisplayImage(watershed_output, "Watershed");
+    ProcessOutput();
+}
+
+void ImageProcessor::DisplayResultOutput() {
     DisplayImage(output_, "process_output");
 }

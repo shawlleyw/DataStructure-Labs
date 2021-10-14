@@ -48,33 +48,33 @@ class PoissonSample {
 
     cv::RNG rng;
 
-    int GetRow(int pos) {
+    int GetRow(const int &pos) {
         if(!row_) return -1;
         return pos / column_;
     }
 
-    int GetLine(int pos) {
+    int GetLine(const int &pos) {
         if(!row_) return -1;
         return pos % column_;
     }
 
-    int GetPos(int row, int column) {
+    int GetPos(const int &row, const int &column) {
         return row * column_ + column;
     }
 
-    bool InMat(int x, int y) {
+    bool InMat(const int &x, const int &y) {
         return x >= 0 && x < row_ && y >= 0 && y < column_;
     }
 
-    Point RandomRound(Point p);
+    Point RandomRound(const Point &p);
 
-    bool CheckNeighbor(Point p);
+    bool CheckNeighbor(const Point &p);
 
-    void PushResult(Point p);
+    void PushResult(const Point &p);
 
-    void PushVis(Point p);
+    void PushVis(const Point &p);
 
-    float GetDist(int nx, int ny, Point p);
+    float GetDist(const int &nx, const int &ny, const Point &p);
 
   public:
 

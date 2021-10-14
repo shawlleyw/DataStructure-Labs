@@ -6,7 +6,7 @@
 
 namespace Utils {
 
-
+namespace mySTL{
 // ! mySTL std::queue<>
 template<class T>
 class Queue {
@@ -22,7 +22,7 @@ class Queue {
 
   public :
 
-    Queue(int size) : size_(size) {
+    explicit Queue(int size) : size_(size) {
         q = new T[size];
     }
 
@@ -65,21 +65,57 @@ class Queue {
         return tail_ - head_;
     }
 
-    T at(int idx) {
+    const T &at(const int &idx) const {
+        return q[head_ + idx];
+    }
+
+    T &at(const int &idx) {
         return q[head_ + idx];
     }
 };
 
-// ! generate random int 
-class RandomGenerator {
+};
+
+
+namespace ADJACENT {
+
+struct node {
+
+    int row, col, idx;
+
+    node *next;
+
+    explicit node() = default;
+
+    explicit node(const node &other) = default;
+
+    explicit node(int irow, int icol, int index, node *inext = nullptr) : row(irow), col(icol), idx(index), next(inext) {}
+
+};
+
+class AdjacentTables {
+  private:
+
+    int nelems_;
+
+    node **heads_;
+
+    int *size_;
+
   public:
 
-    RandomGenerator ();
+    explicit AdjacentTables() = default;
 
-    ~RandomGenerator () = default;
+    explicit AdjacentTables(const int &nelems);
 
-    int RangeInt(int base, int mod);
+    ~AdjacentTables();
+
+    void Link(int idx, const node &next);
+
 };
+
+};
+
 
 }
 
