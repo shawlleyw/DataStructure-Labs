@@ -4,7 +4,7 @@ project(ds_course_design)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_compile_options(-Werror -Wall)
+add_compile_options(-Werror -Wall -lpthread -O3)
 
 include_directories(./include)
 

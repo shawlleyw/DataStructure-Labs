@@ -74,6 +74,54 @@ class Queue {
     }
 };
 
+struct MapChunk {
+    int size, idx;
+
+    MapChunk() = default;
+    MapChunk(const int &size, const int &idx) : size(size), idx(idx) {}
+
+    bool operator < (const MapChunk &other) const {
+        return size < other.size;
+    }
+
+    bool operator < (const int &int_size) const {
+        return size < int_size;
+    }
+};
+
+class Heap {
+  private:
+
+    int nelems_;
+
+    int heap_size_{};
+
+    MapChunk *heaps_;
+
+    void swap(MapChunk &elem_a, MapChunk &elem_b);
+
+    void Down();
+
+    void Up();
+
+  public:
+
+    explicit Heap() = default;
+    
+    explicit Heap(const int &nelems);
+
+    ~Heap();
+
+    bool Empty() const;
+
+    void Push(const int &size, const int &idx);
+
+    const MapChunk &top() const;
+
+    void Pop();
+
+};
+
 };
 
 
@@ -81,7 +129,7 @@ namespace ADJACENT {
 
 struct node {
 
-    int row, col, idx;
+    int to;
 
     node *next;
 
@@ -89,7 +137,7 @@ struct node {
 
     explicit node(const node &other) = default;
 
-    explicit node(int irow, int icol, int index, node *inext = nullptr) : row(irow), col(icol), idx(index), next(inext) {}
+    explicit node(const int &index, node *const &inext = nullptr) : to(index), next(inext) {}
 
 };
 
@@ -110,7 +158,11 @@ class AdjacentTables {
 
     ~AdjacentTables();
 
-    void Link(int idx, const node &next);
+    void Link(const int &idx, const node &next);
+
+    void Link(const int &idx, const int &to);
+
+    node *head(const int &idx) const;
 
 };
 

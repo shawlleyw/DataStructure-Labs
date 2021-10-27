@@ -54,9 +54,9 @@ class ImageProcessor {
 
     void DisplayResultOutput();
 
-    const cv::Mat &markers() const { 
-        return markers_;
-    }
+    const cv::Mat &markers() const { return markers_; }
+
+    const int &comp_count() const { return comp_count_;}
 };
 
 };

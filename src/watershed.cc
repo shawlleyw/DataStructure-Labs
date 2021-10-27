@@ -6,10 +6,10 @@ using namespace IMAGE;
 
 ImageProcessor::ImageProcessor(const char *filename, int kseeds) : kseeds_(kseeds) {
     image_ = cv::imread(filename);
-    seeds_ = new Seeds::Point[kseeds];
+    seeds_ = new Seeds::Point[kseeds_];
     printf ("row: %d  col: %d\n", image_.rows, image_.cols);
-    
-    Seeds::PoissonSample samples(image_.cols, image_.rows, kseeds);
+
+    Seeds::PoissonSample samples(image_.cols, image_.rows, kseeds_);
     auto st = std::chrono::steady_clock::now();
     samples.GenerateSamples();
     auto ed = std::chrono::steady_clock::now();
@@ -17,16 +17,16 @@ ImageProcessor::ImageProcessor(const char *filename, int kseeds) : kseeds_(kseed
     samples.PrintNumberResult();
     printf("%.6lfs\n", cost.count());
 
-    memcpy(seeds_, samples.GetResult(), 1ll * sizeof(Seeds::Point) * kseeds);
+    memcpy(seeds_, samples.GetResult(), 1ll * sizeof(Seeds::Point) * kseeds_);
     seeds_image_ = image_.clone();
-    for(int i = 0; i < kseeds; i++) {
+    for(int i = 0; i < kseeds_; i++) {
         cv::circle(seeds_image_, cv::Point(seeds_[i].x, seeds_[i].y), 3, cv::Scalar::all(255), -1);
     }
 }
 
 void ImageProcessor::DisplayImage(const cv::Mat &image, const char *image_name) {
-    cv::imshow(image_name, image);
-    cv::waitKey(0);
+    // cv::imshow(image_name, image);
+    // cv::waitKey(0);
 }
 
 void ImageProcessor::DisplayResultImage(const char *image_name) {
@@ -50,7 +50,6 @@ void ImageProcessor::InitMarkers() {
 
     cv::Mat marker_mask(image_.size(), 8, 1);
     cv::cvtColor(seeds_image_, marker_mask, cv::COLOR_BGR2GRAY);
-
 	GaussianBlur(marker_mask,marker_mask, cv::Size(5,5),2);   
 	Canny(marker_mask, marker_mask, 80, 150);
     
