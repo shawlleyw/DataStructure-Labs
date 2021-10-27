@@ -235,13 +235,14 @@ void Worker::Queries() {
                 if(lb >= rb || lb < 0) {
                     puts("ERROR: Wrong range!");
                 } else {
+                    fprintf(stderr, "Query %d\n", query_cnt);
                     int li = SearchLowerBound(lb);
                     int ri = SearchUpperBound(rb);
-                    printf("li_size: %d, ri_size: %d\n", chunks_[li].size, chunks_[ri].size);
+                    fprintf(stderr, "li_size: %d, ri_size: %d\n", chunks_[li].size, chunks_[ri].size);
                     int nelems = ri - li;
-                    printf("nelems: %d\n", nelems);
+                    fprintf(stderr, "nelems: %d\n", nelems);
                     int *range = new int[nelems];
-                    fprintf(stderr, "Query %d\n", query_cnt);
+                    
                     for(int i = 0; i < nelems; i++) {
                         range[i] = chunks_[i+li].idx;
                         fprintf(stderr, "number %d: idx: %d, size: %d\n", i, chunks_[i+li].idx, chunks_[i+li].size);
