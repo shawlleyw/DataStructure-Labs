@@ -33,7 +33,7 @@ void CVLabs(int argc, char ** argv) {
         IMAGE::ImageProcessor processor(argv[1], atoi(argv[2]));
         processor.DisplaySeedsOnImage("seeds");
         processor.PerformWaterShed();
-        processor.DisplayResultOutput();
+        // processor.DisplayResultOutput();
         WORKER::Worker worker(processor.markers(), processor.comp_count());
         worker.ProcessAdjecent();
         worker.ReColor();

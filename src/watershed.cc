@@ -25,8 +25,8 @@ ImageProcessor::ImageProcessor(const char *filename, int kseeds) : kseeds_(kseed
 }
 
 void ImageProcessor::DisplayImage(const cv::Mat &image, const char *image_name) {
-    // cv::imshow(image_name, image);
-    // cv::waitKey(0);
+    cv::imshow(image_name, image);
+    cv::waitKey(0);
 }
 
 void ImageProcessor::DisplayResultImage(const char *image_name) {
@@ -68,11 +68,11 @@ void ImageProcessor::InitMarkers() {
 		cv::drawContours(contours_output, contours, index, cv::Scalar::all(255), 1, 8, hierarchy);  
 	}
 
-    DisplayImage(contours_output, "contours_output");
+    // DisplayImage(contours_output, "contours_output");
 
     cv::Mat markers_output;
     cv::convertScaleAbs(markers_, markers_output);
-    DisplayImage(markers_output, "markers");
+    // DisplayImage(markers_output, "markers");
 }
 
 void ImageProcessor::ProcessOutput() {
@@ -108,7 +108,7 @@ void ImageProcessor::PerformWaterShed() {
     cv::watershed(image_, markers_);
     cv::Mat watershed_output;
 	cv::convertScaleAbs(markers_, watershed_output);
-	DisplayImage(watershed_output, "Watershed");
+	// DisplayImage(watershed_output, "Watershed");
     ProcessOutput();
 }
 
